@@ -1,0 +1,140 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Custom Report</title>
+    <link href="CustomReport.css" rel="stylesheet" />
+    <style type="text/css">
+        body {
+            background: #eee;
+        }
+
+        .field {
+            background: #11a7f3;
+            color: #fff;
+            cursor: move;
+            display: inline-block;
+            margin-right: 10px;
+            padding: 5px 10px;
+            margin: 5px;
+        }
+
+        #main {
+            padding-top: 50px;
+        }
+
+        p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div style="padding:20px;font-size:18px;color:#333;">
+        <p>Drop the fields bellow to display table</p>
+        <p>Click the Valeu Fields to sort.</p>
+    </div>
+    <table style="width: 80%;background:#fff;">
+        <tr>
+            <td colspan="2" class="all-fields connectedSortable" style="height: 50px; border: 1px solid #ccc">
+                <div class="field" data-value="ageGroup">AgeGroup</div>
+                <div class="field" data-value="category">Category</div>
+                <div class="field" data-value="year">Year</div>
+            </td>
+        </tr>
+        <tr>
+            <td class="rows connectedSortable" style="width: 50%; height: 50px; border: 1px solid #ccc">
+                <div class="field" data-value="name">Name</div>
+                <div class="field" data-value="sex">Sex</div>
+                <div class="field" data-value="color">Color</div>
+                <div class="field" data-value="country">Country</div>
+            </td>
+            <td class="cols connectedSortable" style="width: 50%; height: 50px; border: 1px solid #ccc"></td>
+        </tr>
+    </table>
+    <div id="main"></div>
+    <script src="http://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/jqueryui/1.11.0/jquery-ui.min.js"></script>
+    <script src="customReport.js"></script>
+    <script type="text/javascript">
+        var testData = [];
+        var report = null;
+
+        function generateData() {
+            var data = [];
+            var countries = ["Australia", "China", "France", "Germany", "Italy", "Japan", "United Kingdom", "United States"];
+            var colors = ["Red", "Blue", "Black", "Green", "White", "Yellow"];
+            var sexs = ["Male", "Female"];
+            var categories = ["Books", "Cars", "Electronics", "Food", "Phones"];
+            var ageGroups = ["15-20", "21-30", "31-40"];
+            var years = [2010, 2011, 2012, 2013, 2014, 2015];
+
+            var count = 100;
+
+            var getRandom = function (min, max) {
+                return parseInt(Math.random() * (max - min + 1) + min);
+            }
+
+            for (var i = 0; i < count; i++) {
+                var order = {
+                    name: "User-" + i,
+                    ageGroup: ageGroups[getRandom(0, 2)],
+                    sex: sexs[getRandom(0, 1)],
+                    color: colors[getRandom(0, 5)],
+                    country: countries[getRandom(0, 7)],
+                    category: categories[getRandom(0, 4)],
+                    quantity: getRandom(1, 5),
+                    amout: getRandom(100, 500).toFixed(2),
+                    year: years[getRandom(0, 5)]
+                };
+                data.push(order);
+            }
+            console.log(data);
+            return data;
+        }
+
+        function create() {
+            report = new CustomReport();
+            $(".rows .field").each(function (i, item) {
+                report.Rows.push({ text: $(item).html(), value: $(item).attr("data-value") });
+            });
+            $(".cols .field").each(function (i, item) {
+                report.Cols.push({ text: $(item).html(), value: $(item).attr("data-value") });
+            });
+            report.Vals = [{ text: "Quantity", value: "quantity" }, { text: "Amout", value: "amout" }];
+            report.Data = testData;
+            report.Width = $(window).width() * .9;
+            report.Height = 500;
+            report.TotalText = "Total";
+            report.FormatField = function (field, value) {
+                if (field.valueField == "amout") {
+                    return ("$" + new Number(value).toFixed(2));
+                }
+                return value;
+            };
+            report.addFieldEvent("name", function (m) {
+                alert("You click " + m);
+            });
+            report.Render("#main");
+        }
+
+        $(function () {
+            testData = generateData();
+
+            $(".all-fields, .rows, .cols").sortable({
+                connectWith: ".connectedSortable",
+                stop: function () {
+                    setTimeout(function () {
+                        report.Destory();
+
+                        create();
+                    }, 1000);
+                }
+            }).disableSelection();
+
+            create();
+        });
+
+    </script>
+</body>
+</html>
