@@ -1,0 +1,240 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="c"></canvas>
+    <script type="text/javascript">
+        var birdSource = "data:image/png;base64,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";
+
+        var app = {
+            target: null,
+            size: {
+                width: 0,
+                height: 0
+            },
+            context: null,
+            bird: {
+                img: null,
+                size: { width: 0, height: 0 },
+                pos: { x: 0, y: 0 },
+            },
+            pillars: [],
+            setting: {
+                pillarCount: 0,
+                pillarWidth: 50,
+                pillarMinHeight: 50,
+                x_interval: 100,
+                y_interval: 50
+            },
+            level: 3,
+            up: false
+        };
+
+        function init() {
+            var img = new Image();
+            img.src = birdSource;
+            img.onload = function () { };
+            app.bird.img = img;
+            app.bird.size.width = img.width;
+            app.bird.size.height = img.height;
+
+            app.target = document.querySelector("#c");
+            app.context = app.target.getContext("2d");
+            app.target.width = app.size.width = window.innerWidth;
+            app.target.height = app.size.height = window.innerHeight;
+
+            app.setting.pillarMinHeight = parseInt(app.size.height * .2);
+        };
+
+        function render() {
+            app.context.clearRect(0, 0, app.size.width, app.size.height);
+            renderBird();
+            renderPillar();
+
+            if (hitPillar()) {
+                alert("game over");
+                return;
+            }
+
+            requestAnimationFrame(render);
+        }
+
+
+        function renderBird() {
+            if (app.up) {
+                app.bird.pos.y -= 3;
+            }
+            else {
+                app.bird.pos.y += 2;
+            }
+            app.context.drawImage(app.bird.img, app.bird.pos.x, app.bird.pos.y);
+        }
+
+        function renderPillar() {
+            var len = app.pillars.length;
+            if (len > 0) {
+                var tmp = [];
+                for (var i = 0; i < len; i++) {
+                    var pillar = app.pillars[i];
+                    pillar.up.x -= 2;
+                    pillar.down.x -= 2;
+
+                    if (pillar.up.x + pillar.up.width > 0) {
+                        tmp.push(pillar);
+                    }
+                    else {
+                        continue;
+                    }
+                    app.context.fillStyle = "#61A861";
+                    app.context.fillRect(pillar.up.x, pillar.up.y, pillar.up.width, pillar.up.height);//上矩形
+                    app.context.fillRect(pillar.down.x, pillar.down.y, pillar.down.width, pillar.down.height);//下矩形
+                }
+                app.pillars = tmp;
+                len = tmp.length;
+            }
+
+            if (len > 0) {
+                var last = app.pillars[len - 1];
+                var xoffset = app.size.width - (last.up.x + last.up.width);
+                if (xoffset > app.setting.x_interval) {
+                    var pillar = createPillar();
+                    app.pillars.push(pillar);
+                }
+            }
+            else {
+                var pillar = createPillar();
+                app.pillars.push(pillar);
+            }
+        }
+
+        function createPillar() {
+            var height_1 = 0;//上矩形高度
+            var height_2 = 0;//中矩形高度
+            var height_3 = 0;//下矩形高度
+            var flag = true;
+            do {
+                height_1 = parseInt(Math.random() * app.size.height);
+                height_2 = parseInt(Math.random() * app.size.height);
+                height_3 = app.size.height - height_1 - height_2;
+                if (height_1 > app.setting.pillarMinHeight && height_2 > app.setting.pillarMinHeight && height_3 > app.setting.y_interval) {
+                    flag = false;
+                }
+            } while (flag);
+
+            var pillar = {
+                up: {
+                    width: app.setting.pillarWidth,
+                    height: height_1,
+                    x: app.size.width,
+                    y: 0
+                },
+                down: {
+                    width: app.setting.pillarWidth,
+                    height: height_3,
+                    x: app.size.width,
+                    y: height_1 + height_2
+                }
+            };
+            return pillar;
+        }
+
+        function hitPillar() {
+
+            if (app.bird.pos.y < 0 || (app.bird.pos.y + app.bird.size.height) > app.size.height) return true;
+
+            if (app.pillars.length > 0) {
+                var xLimit = {
+                    min: app.bird.pos.x,
+                    max: app.bird.pos.x + app.bird.size.width
+                };
+                var yLimit = {
+                    min: app.bird.pos.y,
+                    max: app.bird.pos.y + app.bird.size.height
+                };
+                var rects = [];
+                app.pillars.forEach(function (pillar) {
+                    rects.push(pillar.up);
+                    rects.push(pillar.down);
+                });
+
+                for (var i = xLimit.min; i < xLimit.max; i++) {
+                    for (var j = yLimit.min; j < yLimit.max; j++) {
+                        var pos = { x: i, y: j };
+                        for (var k = 0; k < rects.length; k++) {
+                            var rect = rects[k];
+                            if (isPointInRect(pos, rect)) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        function getRandom(min, max) {
+            return Math.floor(min + Math.random() * (max - min));
+        }
+
+        //判断点是否在区域内
+        function isPointInRect(point, rect) {
+            if (point.x > rect.x && point.y > rect.y && point.x < rect.x + rect.width && point.y < rect.y + rect.height) {
+                return true;
+            }
+            return false;
+        }
+
+        window.onload = function () {
+            init();
+            requestAnimationFrame(render);
+        };
+
+        //控制方向
+        document.onkeydown = function (e) {
+            switch (e.keyCode) {
+                case 37:
+                    //左
+                    break;
+                case 39:
+                    //右
+                    break;
+                case 38:
+                    //上
+                    app.up = true;
+                    break;
+                case 40:
+                    //下
+                    break;
+            }
+        }
+        document.onkeyup = function (e) {
+            switch (e.keyCode) {
+                case 37:
+                    //左
+                    break;
+                case 39:
+                    //右
+                    break;
+                case 38:
+                    //上
+                    app.up = false;
+                    break;
+                case 40:
+                    //下
+                    break;
+            }
+        }
+    </script>
+</body>
+</html>
