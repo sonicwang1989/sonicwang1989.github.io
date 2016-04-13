@@ -196,8 +196,10 @@
         }
 
         window.onload = function () {
-            init();
-            requestAnimationFrame(render);
+            if(confirm("按上方向键控制鸟\nReady")){
+                init();
+                requestAnimationFrame(render);
+            }
         };
 
         //控制方向
