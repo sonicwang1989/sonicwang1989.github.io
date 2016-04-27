@@ -572,8 +572,10 @@
                 }
             };
 
-            $(".loading").hide();
-
+            setTimeout(function () {
+                $(".loading").hide();
+            }, 2000);
+            
             function getRandom(min, max) {
                 return parseFloat((Math.random() * (max - min) + min).toFixed(1));
             }
