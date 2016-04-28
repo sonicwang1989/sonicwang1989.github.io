@@ -16,19 +16,20 @@
         }
 
         .loading {
-            position:fixed;
-            left:0;
-            top:0;
-            width:100%;
-            height:100%;
-            background:#ECE8DE;
-            z-index:1000;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: #ECE8DE;
+            z-index: 1000;
         }
+
             .loading .img {
-                position:absolute;
-                left:50%;
-                top:50%;
-                transform:translate(-50%,-50%);
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%,-50%);
             }
 
         .section {
@@ -262,15 +263,25 @@
         }
 
         .contact-me {
-            background:url("images/qq.png") no-repeat 0 0;
-            width:32px;
-            height:32px;
-            position:fixed;
-            right:0;
-            top:50%;
-            transform:translateY(-50%);
-            z-index:999;
+            background: url("images/qq.png") no-repeat 0 0;
+            width: 32px;
+            height: 32px;
+            position: fixed;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 999;
         }
+
+            .contact-me > a {
+                display: inline-block;
+                width: 32px;
+                height: 32px;
+            }
+
+                .contact-me > a > img {
+                    opacity: 0;
+                }
 
         @keyframes rotate {
             0% {
@@ -340,11 +351,11 @@
                     <div class="box-body">
                         <script type="text/template" class="data">
                             [[
-                                "你好，我的名字叫做王兵，出生于1989年6月，我是一名.NET攻城狮，虽说是.NET搞后台的，但是我的前端水平并不比后台差",
-                                "我喜欢旅游，但是因为没人一起，所以很少外出 :-（！",
-                                "我性格偏内向，但是和比较熟的朋友在一起时，还是偏外向的！",
-                                "现在想寻找一份HTML5或.NET开发相关的工作，HTML5优先考虑，工作地点希望在浦东这边",
-	                            "写的有点乱。。。"
+                            "你好，我的名字叫做王兵，出生于1989年6月，我是一名.NET攻城狮，虽说是.NET搞后台的，但是我的前端水平并不比后台差",
+                            "我喜欢旅游，但是因为没人一起，所以很少外出 :-（！",
+                            "我性格偏内向，但是和比较熟的朋友在一起时，还是偏外向的！",
+                            "现在想寻找一份HTML5或.NET开发相关的工作，HTML5优先考虑，工作地点希望在浦东这边",
+                            "写的有点乱。。。"
                             ]]
                         </script>
                         <textarea class="input"></textarea>
@@ -422,7 +433,7 @@
                         <script type="text/template" class="data">
                             [[
                             "在我看来，无论哪种语言，本质上都是十分相似的，只不过语法略有差异",
-		                    "我能很快上手"	
+                            "我能很快上手"
                             ]]
                         </script>
                         <textarea class="input"></textarea>
@@ -431,7 +442,7 @@
             </div>
         </div>
     </div>
-    <div class="contact-me">
+    <div class="contact-me" title="在线交流">
         <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=411906766&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:411906766:52" alt="在线咨询" title="在线咨询" /></a>
     </div>
     <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -591,7 +602,7 @@
             setTimeout(function () {
                 $(".loading").fadeOut();
             }, 2000);
-            
+
             function getRandom(min, max) {
                 return parseFloat((Math.random() * (max - min) + min).toFixed(1));
             }
