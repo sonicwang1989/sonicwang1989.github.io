@@ -284,7 +284,6 @@ footer {
 footer span.ribbon-outer {
   display: block;
   position: relative;
-  border-bottom: 2px solid #bdb6ad;
 }
 
 footer span.ribbon-inner {
@@ -335,7 +334,6 @@ footer span.left-tail, footer span.right-tail {
   display: block;
   width: 18px;
   height: 29px;
-  background: transparent url(../images/small-ribbon-tail-sprite.png) 0 0 no-repeat;
   position: absolute;
   bottom: 5px;
   z-index: 0;
