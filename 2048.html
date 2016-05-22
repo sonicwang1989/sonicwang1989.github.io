@@ -1,0 +1,199 @@
+<html>
+<head>
+    <title>2048</title>
+    <style type="text/css">
+        body {
+            background: #eee;
+            font: bold 20px 'Microsoft YaHei';
+        }
+
+        .container {
+            background: #bbada0;
+            display: inline-block;
+            border-radius: 5px;
+            padding: 5px;
+        }
+
+            .container .row {
+                clear: both;
+            }
+
+                .container .row .cell {
+                    border-radius: 5px;
+                    float: left;
+                    width: 60px;
+                    height: 60px;
+                    margin: 5px;
+                    line-height: 60px;
+                    text-align: center;
+                }
+
+                    .container .row .cell.empty {
+                        background: #CDC1B4;
+                    }
+
+                    .container .row .cell.level1 {
+                        background: #EEE4DA;
+                    }
+
+                    .container .row .cell.level2 {
+                        background: #EDE0C8;
+                    }
+
+                    .container .row .cell.level3 {
+                        background: #F3B174;
+                        color:#fff;
+                    }
+
+                    .container .row .cell.level4 {
+                        background: #EECF6B;
+                        color:#fff;
+                    }
+
+                    .container .row .cell.level5 {
+                        background: #EFCD58;
+                        color:#fff;
+                    }
+
+                    .container .row .cell.level6 {
+                        background: #EFCD58;
+                        color:#fff;
+                    }
+
+                    .container .row .cell.level7 {
+                        background: #EFCD58;
+                        color:#fff;
+                    }
+
+                    .container .row .cell.level8 {
+                        background: #EFCD58;
+                        color:#fff;
+                    }
+
+                    .container .row .cell.level9 {
+                        background: #EFCD58;
+                        color:#fff;
+                    }
+
+                    .container .row .cell.level10 {
+                        background: #EFCD58;
+                        color:#fff;
+                    }
+
+                    .container .row .cell.level11 {
+                        background: #EFCD58;
+                        color:#fff;
+                    }
+    </style>
+</head>
+<body>
+    <h1>2048</h1>
+    <div>
+        <div class="container"></div>
+    </div>
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var x = 4;
+            var y = 4;
+            var nums = [2, 2, 4, 2, 2, 2, 4, 2, 2, 4];
+            var direction = "";
+            var html = "";
+            for (var i = 1; i <= x; i++) {
+                html += "<div class='row'>";
+                for (var j = 1; j <= y; j++) {
+                    html += "<div class='cell empty' data-x='" + i + "' data-y='" + j + "' data-num=''></div>";
+                }
+                html += "</div>";
+            }
+            $(".container").html(html);
+
+            generate();
+            generate();
+
+            document.onkeydown = function (e) {
+                switch (e.keyCode) {
+                    case 37://左
+                        direction = "left";
+                        break;
+                    case 39://右
+                        direction = "right";
+                        break;
+                    case 38://上
+                        direction = "top";
+                        break;
+                    case 40://下
+                        direction = "bottom";
+                        break;
+                }
+                if (gameover()) {
+                    alert("Game Over");
+                    return;
+                }
+                adjustCell();
+                generate();
+            }
+
+            //生成新数字
+            function generate() {
+                var x = 0;
+                var y = 0;
+
+                do {
+                    x = getRandom(1, 4);
+                    y = getRandom(1, 4);
+                }
+                while (isEmptyCell(x, y) == false);
+
+                var num = nums[getRandom(0, 9)];
+                setNum(x, y, num, 1);
+            }
+
+            //判断是否游戏结束
+            function gameover() {
+                if ($(".container .cell.empty").length == 0) {
+                    return true;
+                }
+                return false;
+            }
+
+            //合并两个相邻的单元格
+            function adjustCell() {
+                var container = $(".container");
+                for (var i = 1; i <= 4; i++)
+                {
+                    for (var j = 1; j <= 4; j++) {
+                        var cell = container.find(".cell");
+                        var nextCell = null;
+                        switch (direction) {
+                            case "left": break;
+
+                            case "right": break;
+                            case "top": break;
+                            case "bottom": break;
+                        }
+                    }
+                }
+            }
+
+            //判断是否是空格
+            function isEmptyCell(x, y) {
+                var cell = $(".container").find(".cell.empty[data-x='" + x + "'][data-y='" + y + "']");
+                if (cell.length > 0) return true;
+                return false;
+            }
+
+            function setNum(x, y, num, level) {
+                var cell = $(".container").find("[data-x='" + x + "'][data-y='" + y + "']");
+                if (cell) {
+                    cell.addClass("level" + level).attr("data-num", num).removeClass("empty").html(num);
+                }
+            }
+        });
+
+        function getRandom(min, max) {
+            return Math.round(Math.random() * (max - min) + min);
+        }
+    </script>
+</body>
+</html>
