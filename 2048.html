@@ -1,6 +1,7 @@
 <html>
 <head>
     <title>2048</title>
+    <meta  name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"/>
     <style type="text/css">
         body {
             background: #eee;
@@ -125,6 +126,7 @@
                     case 40://об
                         direction = "bottom";
                         break;
+                    default: return;
                 }
                 if (gameover()) {
                     alert("Game Over");
