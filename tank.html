@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>坦克大战</title>
+    <style type="text/css">
+        body {
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="c"></canvas>
+    <script type="text/javascript">
+        var width = 0;
+        var height = 0;
+        var ctx = null;
+        var tank={
+                size:{
+                    width:32,
+                    height:32
+                },
+                position:{
+                    x:0,
+                    y:0
+                },
+                speed:1,
+                direction:"bottom",
+                interval:500, //发射间隔0.5秒
+                bullets:[]
+        };
+        var bullet={
+                size:{
+                    width:4,
+                    height:4
+                },
+                position:{
+                    x:0,
+                    y:0
+                },
+                speed:5,
+                timespamp:0,
+                direction:"bottom"
+        };
+        var enemies=[]; //敌人
+        var frame=0;
+        var map={};
+
+        window.onload = function () {
+            width = window.innerWidth;
+            height = window.innerHeight;
+
+            var c = document.querySelector("#c");
+            ctx = c.getContext("2d");
+
+            c.width = width;
+            c.height = height;
+
+            if(window.confirm("方向键控制方向  \r\n开始？")){
+	            window.focus();
+                generateEnemies();
+                render();
+            }
+        }
+
+        var render = function () {
+            frame++;
+            ctx.clearRect(0,0,width,height);
+
+            moveTank();
+            moveEnemyTanks();
+            sendBullet();
+            drawTank(tank);
+            drawBullet();
+            checkHitEnemy();
+            for(var i=0;i<enemies.length;i++){
+                var enemy=enemies[i];
+                if(enemy.isHit) continue;
+                drawTank(enemy);
+            }
+
+
+            clearInvalidBullet();
+            
+            requestAnimationFrame(render);
+        };
+
+        //检测点有效
+        function checkPoint(point, size) {
+            var valid = true;
+            if (point.x <= 0 || point.y <= 0) {
+                valid = false;
+            }
+            if (point.x + size.width >= width || point.y + size.height >= height) {
+                valid = false;
+            }
+            return valid;
+        }
+
+        function drawTank(tank){
+            if(tank.isEnemy==true){
+                ctx.fillStyle="#F5DCDC";
+            }
+            else{
+                ctx.fillStyle="#BAEFC4";
+            }
+            ctx.fillRect(tank.position.x,tank.position.y,tank.size.width,tank.size.height);
+            
+            ctx.font="12px Arial";
+            ctx.fillStyle="#000000";
+            if(tank.isEnemy==true){
+                ctx.fillText("敌",tank.position.x,tank.position.y+tank.size.height-2);
+            }
+            else{
+                ctx.fillText("我",tank.position.x,tank.position.y+tank.size.height-2);
+            }
+        }
+
+        function drawBullet(){
+            ctx.fillStyle="#CCC";
+            var len=tank.bullets.length;
+            if(len==0) return;
+            for(var i=0;i<len;i++){
+                var _bullet=tank.bullets[i];
+                switch(_bullet.direction){
+                    case "left":
+                        _bullet.position.x-=_bullet.speed;
+                    break;
+                    case "right":
+                        _bullet.position.x+=_bullet.speed;
+                    break;
+                    case "top":
+                        _bullet.position.y-=_bullet.speed;
+                    break;
+                    case "bottom":
+                        _bullet.position.y+=_bullet.speed;
+                    break;
+                }
+                ctx.fillRect(_bullet.position.x,_bullet.position.y,_bullet.size.width,_bullet.size.height);
+            }
+        }
+      
+
+        //判断点是否在区域内
+        function isPointInRect(point, rect) {
+            if (point.x > rect.x && point.y > rect.y && point.x < rect.x + rect.width && point.y < rect.y + rect.height) {
+                return true;
+            }
+            return false;
+        }
+
+        //检查命中敌人
+        function checkHitEnemy(){
+            tank.bullets.forEach(function(bullet,i){
+                for(var x=bullet.position.x;x<bullet.position.x+bullet.size.width;x++){
+                    for(var y=bullet.position.y;y<bullet.position.y+bullet.size.height;y++){
+         
+                        enemies.forEach(function(enemy){
+                            var point={x:x,y:y};
+                            var rect={
+                                x:enemy.position.x,
+                                y:enemy.position.y,
+                                width:enemy.size.width,
+                                height:enemy.size.height
+                            };
+                            if(isPointInRect(point,rect)){
+                                enemy.isHit=true;
+                                return;
+                            }
+                        });
+                    }   
+                }
+            });
+        }
+
+        //获取随机数
+        function random(min, max) {
+            return Math.floor(min + Math.random() * (max - min));
+        }
+
+        //坦克移动
+        function moveTank(){
+            if(map["37"]==true){
+                tank.position.x-=tank.speed;
+                tank.direction="left";
+            }
+            else if(map["39"]==true){
+                tank.position.x+=tank.speed;
+                tank.direction="right";
+            }
+            else if(map["38"]==true){
+                tank.position.y-=tank.speed;
+                tank.direction="top";
+            }
+            else if(map["40"]==true){
+                tank.position.y+=tank.speed;
+                tank.direction="bottom";
+            }
+        }
+
+        function moveEnemyTanks(){
+            for(var i=0;i<enemies.length;i++){
+                var enemy=enemies[i];
+
+                switch(enemy.direction){
+                    case "left":
+                        enemy.position.x-=enemy.speed;
+                        if(enemy.position.x<=0) enemy.direction=["right","top","bottom"][random(0,3)];
+                        break;
+                    case "right":
+                        enemy.position.x+=enemy.speed;
+                        if(enemy.position.x+enemy.size.width>width) enemy.direction=["left","top","bottom"][random(0,3)];
+                        break;
+                    case "top":
+                         enemy.position.y-=enemy.speed;
+                         if(enemy.position.y<=0) enemy.direction=["left","right","bottom"][random(0,3)];
+                        break;
+                    case "bottom":
+                        enemy.position.y+=enemy.speed;
+                        if(enemy.position.y+enemy.size.height>height) enemy.direction=["left","right","top"][random(0,3)];
+                        break;
+                }
+            }
+        }
+
+        //发射子弹
+        function sendBullet(){
+            if(map["65"]!=true) return;
+            var b=JSON.parse(JSON.stringify(bullet));
+            b.direction=tank.direction;
+            b.position.x=tank.position.x+(tank.size.width-bullet.size.width)/2;
+            b.position.y=tank.position.y+(tank.size.height-bullet.size.height)/2;
+            b.timestamp=Date.now();
+            if(tank.bullets.length>0){
+                if((b.timestamp-tank.bullets[tank.bullets.length-1].timestamp)<tank.interval) return;
+            }
+            tank.bullets.push(b);
+        }
+
+        function generateEnemies(){
+            for(var i=0;i<5;i++){
+                var enemy=clone(tank);
+                enemy.position.x=random(0,width-tank.size.width);
+                enemy.position.y=random(0,height-tank.size.height);
+                
+                var r=random(0,999)%4;
+                if(r==0) enemy.direction="left";
+                else if(r==1) enemy.direction="right";
+                else if(r==2) enemy.direction="top";
+                else if(r==3) enemy.direction="bottom";
+                enemy.isEnemy=true;
+                enemies.push(enemy);
+            }
+        }
+
+        //清除无效的子弹
+        function clearInvalidBullet(){
+            var len=tank.bullets.length;
+            if(len==0) return;
+            var tmp=[];
+            for(var i=0;i<len;i++){
+                var _bullet=tank.bullets[i];
+                switch(_bullet.direction){
+                    case "left":
+                        if(_bullet.position.x+_bullet.size.width>0) tmp.push(_bullet);
+                        break;
+                    case "right":
+                        if(_bullet.position.x<width) tmp.push(_bullet);
+                        break;
+                    case "top":
+                        if(_bullet.position.y+_bullet.size.height>0) tmp.push(_bullet);
+                        break;
+                    case "bottom":
+                        if(_bullet.position.y<height) tmp.push(_bullet);
+                        break;
+                }
+            }
+            tank.bullets=tmp;
+        }
+
+        function clone(obj){
+            var copy=JSON.parse(JSON.stringify(obj));
+            return copy;
+        }
+
+
+        //控制方向
+        document.onkeydown = function (e) {
+            map[e.keyCode]=true;
+        }
+
+        document.onkeyup = function (e) {
+            map[e.keyCode]=false;
+        }
+
+        setInterval(function () {
+            console.log("FPS:" + frame);
+            frame = 0;
+        }, 1000);
+    </script>
+</body>
+</html>
