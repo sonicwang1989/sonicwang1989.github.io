@@ -5,17 +5,19 @@
 </head>
 
 <body>
-    <iframe id="frame"></iframe>
+    <iframe id="frame" src="./test.pdf"></iframe>
 
     <script>
         window.onload = function () {
-            alert('3秒后打印');
+            alert('5秒后打印');
 
-            let frame = document.getElementById('frame')
-            frame.setAttribute('src', './test.pdf')
-            frame.onload = function () {
-                frame.contentWindow.print();
-            }
+            setTimeout(() => {
+                let frame = document.getElementById('frame')
+                frame.setAttribute('src', './test.pdf')
+                frame.onload = function () {
+                    frame.contentWindow.print();
+                }
+            }, 5000)
         }
 
     </script>
