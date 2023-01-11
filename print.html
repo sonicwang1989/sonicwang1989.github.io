@@ -1,0 +1,19 @@
+<html>
+
+<head>
+
+</head>
+
+<body>
+    <button id="btn">打印</button>
+    <iframe id="frame" src="./test.pdf"></iframe>
+
+    <script>
+        let frame = document.getElementById('frame')
+        frame.onload = function () {
+            frame.contentWindow.print();
+        }
+    </script>
+</body>
+
+</html>
